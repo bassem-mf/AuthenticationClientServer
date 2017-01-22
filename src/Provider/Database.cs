@@ -11,7 +11,7 @@ namespace Provider
             {
                 Id = "123456789",
                 Secret = "987654321",
-                RedirectionUri = "http://localhost/Handler/Return"
+                RedirectionUri = "http://localhost:57339/Account/HandleAuthenticationResponse"
             }
         };
 

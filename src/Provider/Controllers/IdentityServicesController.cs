@@ -9,7 +9,7 @@ namespace Provider.Controllers
     public class IdentityServicesController
         : Controller
     {
-        // GET or POST: /IdentityServices/Auhenticate
+        // GET or POST: /IdentityServices/Authenticate
         public ActionResult Authenticate(AuthenticationRequest request)
         {
             ActionResult actionResult;

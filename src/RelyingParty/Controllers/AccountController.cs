@@ -7,17 +7,17 @@ namespace RelyingParty.Controllers
     public class AccountController
         : Controller
     {
-        // POST: /Account/Login
+        // POST: /Account/RequestAuthentication
         [HttpPost]
-        public RedirectResult Login()
+        public RedirectResult RequestAuthentication()
         {
-            string exchangeUrl = "https://www.yahoo.com/";
+            string exchangeUrl = Url.Action("HandleAuthenticationResponse", "Account", null, Request.Url.Scheme);
             string antiForgeryStateToken = Guid.NewGuid().ToString();
             Session["OAuthAntiForgeryStateToken"] = antiForgeryStateToken;
             string antiReplayNonceToken = Guid.NewGuid().ToString();
             Session["OAuthAntiReplayNonceToken"] = antiReplayNonceToken;
 
-            string authenticationRequestUrl = $"{Configuration.AUTHORIZATION_ENDPOINT}?scope=openid&response_type=code&client_id={Configuration.CLIENT_ID}&redirect_uri={HttpUtility.UrlEncode(exchangeUrl)}&state={antiForgeryStateToken}&nonce={antiReplayNonceToken}";
+            string authenticationRequestUrl = $"{Configuration.AUTHORIZATION_ENDPOINT_URL}?scope=openid&response_type=code&client_id={Configuration.CLIENT_ID}&redirect_uri={HttpUtility.UrlEncode(exchangeUrl)}&state={antiForgeryStateToken}&nonce={antiReplayNonceToken}";
             return Redirect(authenticationRequestUrl);
         }
     }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace RelyingParty
+﻿namespace RelyingParty
 {
     public class Configuration
     {
-        public const string AUTHORIZATION_ENDPOINT = "http://localhost:50343/";
+        public const string AUTHORIZATION_ENDPOINT_URL = "http://localhost:50343/IdentityServices/Authenticate";
         public const string CLIENT_ID = "123456789";
         public const string CLIENT_SECRET = "987654321";
     }
