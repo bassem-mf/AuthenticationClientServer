@@ -76,6 +76,8 @@ namespace IdentityServiceModels
                 throw new Exception("You should provide a value for either \"code\" (in case of success response) or \"error\" (in case of error response). Providing a value for none/both of them is not acceptable.");
             }
 
+            query["state"] = State;
+
             uriBuilder.Query = query.ToString();
 
             return uriBuilder.Uri.AbsoluteUri;

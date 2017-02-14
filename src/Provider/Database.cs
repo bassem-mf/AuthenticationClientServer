@@ -10,12 +10,12 @@ namespace Provider
             new RegisteredClient
             {
                 Id = "123456789",
-                Secret = "987654321",
-                RedirectionUri = "http://localhost:57339/Account/HandleAuthenticationResponse"
+                Secret = "987654321111222333444555666777888999",
+                RedirectionUri = "http://relyingparty.localhost:57339/Account/HandleAuthenticationResponse"
             }
         };
 
-        public static ConcurrentBag<IssuedAuthorization> IssuedAuthorizations = new ConcurrentBag<IssuedAuthorization>();
+        public static ConcurrentDictionary<Guid, IssuedAuthorization> IssuedAuthorizations = new ConcurrentDictionary<Guid, IssuedAuthorization>();
 
 
         public class RegisteredClient
@@ -27,11 +27,11 @@ namespace Provider
 
         public class IssuedAuthorization
         {
-            public Guid AuthorizationCode { get; set; }
             public string UserId { get; set; }
             public DateTime TimeIssued { get; set; }
             public string ClientId { get; set; }
             public string RedirectionUri { get; set; }
+            public string Nonce { get; set; }
         }
     }
 }

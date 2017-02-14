@@ -2,6 +2,8 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using System.Security.Claims;
+using System.Web.Helpers;
 
 [assembly: OwinStartup(typeof(RelyingParty.Startup))]
 
@@ -18,6 +20,8 @@ namespace RelyingParty
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login")
             });
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
         }
     }
 }

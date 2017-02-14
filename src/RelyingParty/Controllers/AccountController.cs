@@ -12,7 +12,7 @@ using System.Web.Mvc;
 namespace RelyingParty.Controllers
 {
     public class AccountController
-        : Controller
+        : AsyncController
     {
         // POST: /Account/RequestAuthentication
         [HttpPost]
@@ -85,37 +85,55 @@ namespace RelyingParty.Controllers
                                 else  // Successful token response
                                 {
                                     SuccessfulTokenResponse successfulTokenResponse = SuccessfulTokenResponse.Deserialize(tokenResponseJson);
-                                    IdToken.ValidateAndLoadResult validateAndLoadIdTokenResult = IdToken.ValidateAndLoad(successfulTokenResponse.IdToken, Configuration.ISSUER_IDENTIFIER, Configuration.CLIENT_ID, Configuration.CLIENT_SECRET);
-                                    if (!validateAndLoadIdTokenResult.IsValid)
+                                    if (successfulTokenResponse.TokenType != "Bearer")
                                     {
-                                        actionResult = View(viewName: "Error", model: "ID token validation failed. Error: " + validateAndLoadIdTokenResult.ErrorMessage);
+                                        actionResult = View(viewName: "Error", model: $"Unexpected token type \"{successfulTokenResponse.TokenType}\". The only supported token type is \"Bearer\".");
                                     }
-                                    else if (validateAndLoadIdTokenResult.IdToken.Exp < DateTime.UtcNow)
+                                    else if (string.IsNullOrEmpty(successfulTokenResponse.IdToken))
                                     {
-                                        actionResult = View(viewName: "Error", model: "ID token is expired.");
-                                    }
-                                    else if (validateAndLoadIdTokenResult.IdToken.Nonce != (string)Session["OAuthAntiReplayNonceToken"])
-                                    {
-                                        actionResult = View(viewName: "Error", model: "Invalid \"nonce\" token. Possible replay attack.");
+                                        actionResult = View(viewName: "Error", model: "The token response does not contain the required ID token.");
                                     }
                                     else
                                     {
-                                        // All checks passed. Login the user and redirect to the Home page.
-                                        string userId = $"{validateAndLoadIdTokenResult.IdToken.Iss}|{validateAndLoadIdTokenResult.IdToken.Sub}";
-                                        var claimsIdentity = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userId) }, DefaultAuthenticationTypes.ApplicationCookie);
-                                        HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties { IsPersistent = false }, claimsIdentity);
-                                        actionResult = RedirectToAction("Index", "Home");
+                                        IdToken.ValidateAndLoadResult validateAndLoadIdTokenResult = IdToken.ValidateAndLoad(successfulTokenResponse.IdToken, Configuration.ISSUER_IDENTIFIER, Configuration.CLIENT_ID, Configuration.CLIENT_SECRET);
+                                        if (!validateAndLoadIdTokenResult.IsValid)
+                                        {
+                                            actionResult = View(viewName: "Error", model: "ID token validation failed. Error: " + validateAndLoadIdTokenResult.ErrorMessage);
+                                        }
+                                        else if (validateAndLoadIdTokenResult.IdToken.Exp < DateTime.UtcNow)
+                                        {
+                                            actionResult = View(viewName: "Error", model: "ID token is expired.");
+                                        }
+                                        else if (validateAndLoadIdTokenResult.IdToken.Nonce != (string)Session["OAuthAntiReplayNonceToken"])
+                                        {
+                                            actionResult = View(viewName: "Error", model: "Invalid \"nonce\" token. Possible replay attack.");
+                                        }
+                                        else
+                                        {
+                                            // All checks passed. Login the user and redirect to the Home page.
+                                            string userId = $"{validateAndLoadIdTokenResult.IdToken.Iss}|{validateAndLoadIdTokenResult.IdToken.Sub}";
+                                            var claimsIdentity = new ClaimsIdentity(new Claim[] { new Claim(ClaimTypes.Name, userId) }, DefaultAuthenticationTypes.ApplicationCookie);
+                                            HttpContext.GetOwinContext().Authentication.SignIn(new AuthenticationProperties { IsPersistent = false }, claimsIdentity);
+                                            actionResult = RedirectToAction("Index", "Home");
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-
-                actionResult = null;
             }
 
             return actionResult;
+        }
+
+        // POST: /Account/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Logout()
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

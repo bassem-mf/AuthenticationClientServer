@@ -64,6 +64,7 @@
     <Compile Include="SuccessfulTokenResponse.cs" />
     <Compile Include="TokenErrorResponse.cs" />
     <Compile Include="TokenRequest.cs" />
+    <Compile Include="TokenRequestParsingException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

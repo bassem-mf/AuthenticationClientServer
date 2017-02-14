@@ -25,5 +25,17 @@ namespace IdentityServiceModels
                 accessToken: responseParameters.ContainsKey("access_token") ? responseParameters["access_token"] : null,
                 idToken: responseParameters.ContainsKey("id_token") ? responseParameters["id_token"] : null);
         }
+
+
+        public string GetResponseJson()
+        {
+            return JsonConvert.SerializeObject(
+                new
+                {
+                    token_type = TokenType,
+                    access_token = AccessToken,
+                    id_token = IdToken
+                });
+        }
     }
 }

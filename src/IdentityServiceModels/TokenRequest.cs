@@ -29,7 +29,7 @@ namespace IdentityServiceModels
         public static TokenRequest Load(string authorizationHeaderValue, NameValueCollection formParameters)
         {
             if (!authorizationHeaderValue.StartsWith("Basic "))
-                throw new FormatException("Invalid authorization header value format.");
+                throw new TokenRequestParsingException("Invalid authorization header value format.");
 
             string encodedCredentials = authorizationHeaderValue.Substring(6);
             string[] urlEncodedCredentials = Encoding.GetEncoding("ISO-8859-1").GetString(Convert.FromBase64String(encodedCredentials)).Split(':');

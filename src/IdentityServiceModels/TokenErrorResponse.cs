@@ -22,5 +22,16 @@ namespace IdentityServiceModels
                 error: responseParameters.ContainsKey("error") ? responseParameters["error"] : null,
                 errorDescription: responseParameters.ContainsKey("error_description") ? responseParameters["error_description"] : null);
         }
+
+
+        public string GetResponseJson()
+        {
+            return JsonConvert.SerializeObject(
+                new
+                {
+                    error = Error,
+                    error_description = ErrorDescription
+                });
+        }
     }
 }

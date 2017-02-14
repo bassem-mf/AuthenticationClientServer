@@ -16,5 +16,14 @@
     else
     {
         <p>You are logged in as @User.Identity.Name</p>
+
+        Html.BeginForm("Logout", "Account", null, FormMethod.Post, new { style = "margin-bottom: 10px;" });
+
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Logout" class="btn btn-default" />
+
+        Html.EndForm();
+
+        <p>The button above will log you out of the relying party only. Not the identity provider.</p>
     }
 </div>

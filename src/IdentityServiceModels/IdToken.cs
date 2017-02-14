@@ -1,12 +1,16 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 
 namespace IdentityServiceModels
 {
     public class IdToken
     {
+        // ID token fields/claims specified here: http://openid.net/specs/openid-connect-core-1_0.html#IDToken
+
         public string Iss { get; set; }
         public string Sub { get; set; }
         public string[] Aud { get; set; }
@@ -64,7 +68,7 @@ namespace IdentityServiceModels
                 var idToken = new IdToken(
                     iss: (string)payload["iss"],
                     sub: (string)payload["sub"],
-                    aud: (string[])payload["aud"],
+                    aud: ((JArray)payload["aud"]).Select(item => item.Value<string>()).ToArray(),
                     exp: DateTimeOffset.FromUnixTimeSeconds((long)payload["exp"]).UtcDateTime,
                     iat: DateTimeOffset.FromUnixTimeSeconds((long)payload["iat"]).UtcDateTime,
                     nonce: (string)payload["nonce"]);

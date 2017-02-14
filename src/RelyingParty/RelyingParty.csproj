@@ -244,7 +244,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57399</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:57339/</IISUrl>
+          <IISUrl>http://relyingparty.localhost:57339/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
