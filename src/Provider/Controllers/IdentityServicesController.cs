@@ -203,7 +203,7 @@ namespace Provider.Controllers
             return actionResult;
         }
 
-        public ActionResult TokenErrorJson(string error, string errorDescription)
+        private ActionResult TokenErrorJson(string error, string errorDescription)
         {
             if (error == "invalid_client")
             {
