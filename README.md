@@ -1,4 +1,4 @@
-# AuthenticationClientServer
+# Authentication Client/Server
 This is a simplified implementation of an OpenID Connect Provider and Relying Party using ASP.NET MVC. "Simplified" here means that all messages passed between the provider and the relying party are valid OpenID Connect messages. But not all scenarios that should be handled by an OpenID Connect provider and relying party are handled by this implementation.
 
 This project is intended to be a reference implementation for people who want to build Web applications with external authentication functionality when they are in control of both the client and the server.
