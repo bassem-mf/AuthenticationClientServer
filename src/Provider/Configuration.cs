@@ -2,6 +2,6 @@
 {
     public static class Configuration
     {
-        public const string ISSUER_IDENTIFIER = "https://relyingparty.localhost";
+        public const string ISSUER_IDENTIFIER = "https://provider.localhost";
     }
 }
